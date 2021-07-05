@@ -45,7 +45,9 @@ ChatBot::ChatBot(const ChatBot &other) {
   std::cout << "ChatBot copy constructor!"
             << "\n";
 
-  _image = other._image;
+  // _image = other._image;
+  _image = new wxBitmap();
+  *_image = *other._image;
 
   // rootNode is also smart pointrt
   _root = other._root;
@@ -62,8 +64,6 @@ ChatBot::ChatBot(ChatBot &&other) {
   _root = other._root;
   _chatLogic = other._chatLogic;
   _chatLogic->SetChatbotHandle(this);
-  // unique_ptr does not need free this ?? why should we null this smart ptr
-  // explictly?
 
   // move constructor, you have to void the source members
   other._image = NULL;
@@ -77,7 +77,9 @@ ChatBot &ChatBot::operator=(const ChatBot &other) {
   if (&other == this) {
     return *this;
   }
-  _image = other._image;
+  // _image = other._image;
+  _image = new wxBitmap();
+  *_image = *other._image;
   _root = other._root;
   _chatLogic = other._chatLogic;
   return *this;
