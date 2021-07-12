@@ -13,7 +13,7 @@ ChatBot::ChatBot() {
   // invalidate data handles
   _image = nullptr;
   _chatLogic = nullptr;
-  _root = nullptr;
+  _rootNode = nullptr;
 }
 
 // constructor WITH memory allocation
@@ -22,88 +22,27 @@ ChatBot::ChatBot(std::string filename) {
 
   // invalidate data handles
   _chatLogic = nullptr;
-  _root = nullptr;
+  _rootNode = nullptr;
 
   // load image into heap memory
   _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
 ChatBot::~ChatBot() {
-  std::cout << "ChatBot Destructor" << std::endl;
-
   // deallocate heap memory
   if (_image != NULL) // Attention: wxWidgets used NULL and not nullptr
   {
+    // if (_Chatbot_cnt == 0) {
     delete _image;
     _image = NULL;
+    // }
   }
+  std::cout << "ChatBot Destructor" << std::endl;
 }
 
 //// STUDENT CODE
-//// copy constructor (shallow copy)
-ChatBot::ChatBot(const ChatBot &other) {
-  std::cout << "ChatBot copy constructor!"
-            << "\n";
+////
 
-  // _image = other._image;
-  _image = new wxBitmap();
-  *_image = *other._image;
-
-  // rootNode is also smart pointrt
-  _root = other._root;
-
-  // chatLogic is std::unique_ptr
-  _chatLogic = other._chatLogic;
-}
-
-ChatBot::ChatBot(ChatBot &&other) {
-  std::cout << "ChatBot move constructor!"
-            << "\n";
-
-  _image = other._image;
-  _root = other._root;
-  _chatLogic = other._chatLogic;
-  _chatLogic->SetChatbotHandle(this);
-
-  // move constructor, you have to void the source members
-  other._image = NULL;
-  other._root = nullptr;
-  other._chatLogic = nullptr;
-}
-
-ChatBot &ChatBot::operator=(const ChatBot &other) {
-  std::cout << "ChatBot copy assignment!"
-            << "\n";
-  if (&other == this) {
-    return *this;
-  }
-  // _image = other._image;
-  _image = new wxBitmap();
-  *_image = *other._image;
-  _root = other._root;
-  _chatLogic = other._chatLogic;
-  return *this;
-}
-
-ChatBot &ChatBot::operator=(ChatBot &&other) {
-  std::cout << "ChatBot move assignment!"
-            << "\n";
-  if (&other == this) {
-    return *this;
-  }
-  if (!_image)
-    delete _image;
-  // transfering
-  _image = other._image;
-  _root = other._root;
-  _chatLogic = other._chatLogic;
-
-  _chatLogic->SetChatbotHandle(this);
-  // voiding
-  other._image = NULL; // nullptr
-  other._root = nullptr;
-  other._chatLogic = nullptr;
-}
 ////
 //// EOF STUDENT CODE
 
@@ -112,8 +51,8 @@ void ChatBot::ReceiveMessageFromUser(std::string message) {
   typedef std::pair<GraphEdge *, int> EdgeDist;
   std::vector<EdgeDist> levDists; // format is <ptr,levDist>
 
-  for (size_t i = 0; i < _current->GetNumberOfChildEdges(); ++i) {
-    GraphEdge *edge = _current->GetChildEdgeAtIndex(i);
+  for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i) {
+    GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
     for (auto keyword : edge->GetKeywords()) {
       EdgeDist ed{edge, ComputeLevenshteinDistance(keyword, message)};
       levDists.push_back(ed);
@@ -132,19 +71,19 @@ void ChatBot::ReceiveMessageFromUser(std::string message) {
                                                     // edge is at first position
   } else {
     // go back to root node
-    newNode = _root;
+    newNode = _rootNode;
   }
 
   // tell current node to move chatbot to new node
-  _current->MoveChatbotToNewNode(newNode);
+  _currentNode->MoveChatbotToNewNode(newNode);
 }
 
-void ChatBot::SetCurrnode(GraphNode *node) {
+void ChatBot::SetCurrentNode(GraphNode *node) {
   // update pointer to current node
-  _current = node;
+  _currentNode = node;
 
   // select a random node answer (if several answers should exist)
-  std::vector<std::string> answers = _current->GetAnswers();
+  std::vector<std::string> answers = _currentNode->GetAnswers();
   std::mt19937 generator(int(std::time(0)));
   std::uniform_int_distribution<int> dis(0, answers.size() - 1);
   std::string answer = answers.at(dis(generator));

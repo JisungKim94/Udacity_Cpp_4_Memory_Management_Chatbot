@@ -13,8 +13,8 @@ private:
   wxBitmap *_image; // avatar image
 
   // data handles (not owned)
-  GraphNode *_current;
-  GraphNode *_root;
+  GraphNode *_currentNode;
+  GraphNode *_rootNode;
   ChatLogic *_chatLogic;
 
   // proprietary functions
@@ -28,22 +28,15 @@ public:
 
   //// STUDENT CODE
   ////
-  // copy constructor
-  ChatBot(const ChatBot &other);
-  // move constructor
-  ChatBot(ChatBot &&other);
-  // copy assignment
-  ChatBot &operator=(const ChatBot &other);
-  // move assignment
-  ChatBot &operator=(ChatBot &&other);
 
   ////
   //// EOF STUDENT CODE
 
   // getters / setters
-  void SetCurrnode(GraphNode *node);
-  void SetRootNode(GraphNode *rootNode) { _root = rootNode; }
+  void SetCurrentNode(GraphNode *node);
+  void SetRootNode(GraphNode *rootNode) { _rootNode = rootNode; }
   void SetChatLogicHandle(ChatLogic *chatLogic) { _chatLogic = chatLogic; }
+  ChatLogic *GetChatLogicHandle() { return _chatLogic; }
   wxBitmap *GetImageHandle() { return _image; }
 
   // communication

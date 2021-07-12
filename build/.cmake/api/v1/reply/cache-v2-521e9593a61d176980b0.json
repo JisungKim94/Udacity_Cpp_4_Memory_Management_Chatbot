@@ -39,11 +39,11 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."
+					"value" : "No help, variable specified on the command line."
 				}
 			],
 			"type" : "STRING",
-			"value" : ""
+			"value" : "Debug"
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/kjs/My_Workspace/Udacity_Cpp_4_Memory_Management_Chatbot/build"
+			"value" : "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -519,11 +519,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "Enable/Disable output of compile commands during generation."
+					"value" : "No help, variable specified on the command line."
 				}
 			],
 			"type" : "BOOL",
-			"value" : "OFF"
+			"value" : "TRUE"
 		},
 		{
 			"name" : "CMAKE_EXTRA_GENERATOR",
@@ -595,7 +595,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/kjs/My_Workspace/Udacity_Cpp_4_Memory_Management_Chatbot"
+			"value" : "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1143,7 +1143,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/kjs/My_Workspace/Udacity_Cpp_4_Memory_Management_Chatbot/build"
+			"value" : "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build"
 		},
 		{
 			"name" : "Membot_SOURCE_DIR",
@@ -1155,7 +1155,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/kjs/My_Workspace/Udacity_Cpp_4_Memory_Management_Chatbot"
+			"value" : "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot"
 		},
 		{
 			"name" : "wxWidgets_CONFIG_EXECUTABLE",
