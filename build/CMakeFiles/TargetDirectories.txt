@@ -1,3 +1,3 @@
-/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/rebuild_cache.dir
-/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/edit_cache.dir
-/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir
+/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/rebuild_cache.dir
+/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/edit_cache.dir
+/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir

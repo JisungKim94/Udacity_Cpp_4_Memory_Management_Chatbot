@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/src/chatbot.cpp" "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatbot.cpp.o"
-  "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/src/chatgui.cpp" "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatgui.cpp.o"
-  "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/src/chatlogic.cpp" "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatlogic.cpp.o"
-  "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/src/graphedge.cpp" "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/graphedge.cpp.o"
-  "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/src/graphnode.cpp" "/home/kjs/My_Workspace/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/graphnode.cpp.o"
+  "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/src/chatbot.cpp" "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatbot.cpp.o"
+  "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/src/chatgui.cpp" "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatgui.cpp.o"
+  "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/src/chatlogic.cpp" "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/chatlogic.cpp.o"
+  "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/src/graphedge.cpp" "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/graphedge.cpp.o"
+  "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/src/graphnode.cpp" "/home/kjs/My_Workspace/Memorychatbot/my_ver/CppND-Memory-Management-Chatbot/build/CMakeFiles/membot.dir/src/graphnode.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
