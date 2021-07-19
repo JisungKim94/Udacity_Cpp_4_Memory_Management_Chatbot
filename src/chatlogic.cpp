@@ -16,11 +16,11 @@ ChatLogic::ChatLogic() {
   ////
 
   // create instance of chatbot
-  _chatBot = new ChatBot("../images/chatbot.png");
+  // _chatBot = new ChatBot("../images/chatbot.png");
 
   // add pointer to chatlogic so that chatbot answers can be passed on to the
   // GUI
-  _chatBot->SetChatLogicHandle(this);
+  // _chatBot->SetChatLogicHandle(this);
 
   ////
   //// EOF STUDENT CODE
@@ -31,17 +31,17 @@ ChatLogic::~ChatLogic() {
   ////
 
   // delete chatbot instance
-  delete _chatBot;
+  // delete _chatBot;
 
   // delete all nodes
-  for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it) {
-    delete *it;
-  }
+  // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it) {
+  // delete *it;
+  // }
 
   // delete all edges
-  for (auto it = std::begin(_edges); it != std::end(_edges); ++it) {
-    delete *it;
-  }
+  // for (auto it = std::begin(_edges); it != std::end(_edges); ++it) {
+  // delete *it;
+  // }
 
   ////
   //// EOF STUDENT CODE
@@ -96,7 +96,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
               tokenStr.substr(posTokenInfo + 1, tokenStr.size() - 1);
 
           // add token to vector
-          tokens.push_back(std::make_pair(tokenType, tokenInfo));
+          tokens.emplace_back(std::make_pair(tokenType, tokenInfo));
         }
 
         // remove token from current line
@@ -128,7 +128,19 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
             // check if node with this ID exists already
             auto newNode = std::find_if(
                 _nodes.begin(), _nodes.end(),
-                [&id](GraphNode *node) { return node->GetID() == id; });
+                // 람다 표현식이라는 방식.. 이름 없이 간략하게
+                // 함수를 사용한다고 보면 댐 어렵네..
+                //  &node인 이유 : node는 _node vector 안에
+                // 있는 node 한 개 즉, node = unique pointer type
+                // 이므로 함수 arg로 사용할 때 &node로 써야함
+                // const 사용하는 이유 : ChatBot::SetCurrentNode에서
+                // node가 currentnode로 카피 되는데 이때 node포인터가
+                // 바뀔 수 있음 우리가 아래 사용할 node는 바뀌면 안되니까
+                // const로 막아준다.
+                //  [&id](GraphNode *node) { return node->GetID() == id; });
+                [&id](const std::unique_ptr<GraphNode> &node) {
+                  return node->GetID() == id;
+                });
 
             // create new element if ID does not yet exist
             if (newNode == _nodes.end()) {
@@ -164,26 +176,48 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
               // get iterator on incoming and outgoing node via ID search
               auto parentNode = std::find_if(
                   _nodes.begin(), _nodes.end(),
-                  [&parentToken](GraphNode *node) {
+                  // 람다 방식..이름 없이 간략하게 함수를
+                  // 사용한다고 보면 댐 어렵네..
+                  // &node인 이유 : node는 _node안에 있는
+                  // const 사용하는 이유 : ChatBot::SetCurrentNode에서
+                  // node가 currentnode로 카피 되는데 이때 node포인터가
+                  // 바뀔 수 있음 우리가 아래 사용할 node는 바뀌면 안되니까
+                  // const로 막아준다.
+                  [&parentToken](const std::unique_ptr<GraphNode> &node) {
                     return node->GetID() == std::stoi(parentToken->second);
                   });
               auto childNode = std::find_if(
-                  _nodes.begin(), _nodes.end(), [&childToken](GraphNode *node) {
+                  _nodes.begin(), _nodes.end(),
+                  // 람다 방식..이름 없이 간략하게 함수를
+                  // 사용한다고 보면 댐 어렵네..
+                  // &node인 이유 : node는 _node안에 있는
+                  // const 사용하는 이유 : ChatBot::SetCurrentNode에서
+                  // node가 currentnode로 카피 되는데 이때 node포인터가
+                  // 바뀔 수 있음 우리가 아래 사용할 node는 바뀌면 안되니까
+                  // const로 막아준다.
+                  [&childToken](const std::unique_ptr<GraphNode> &node) {
                     return node->GetID() == std::stoi(childToken->second);
                   });
 
               // create new edge
-              GraphEdge *edge = new GraphEdge(id);
-              edge->SetChildNode(*childNode);
-              edge->SetParentNode(*parentNode);
-              _edges.push_back(edge);
+              // GraphEdge *edge = new GraphEdge(id);
+              std::unique_ptr<GraphEdge> edge = std::make_unique<GraphEdge>(id);
+
+              // get() is return raw pointer
+              edge->SetChildNode((*childNode).get());
+              edge->SetParentNode((*parentNode).get());
+              // _edges = ~ChatLogic() 에서 edge들 deallocation 할 때 사용하려고
+              // 만든거 즉 deallocation smart pointer가 알아서 하니까 얘는 안씀
+              // _edges.emplace_back(*edge);
 
               // find all keywords for current node
               AddAllTokensToElement("KEYWORD", tokens, *edge);
 
-              // store reference in child node and parent node
-              (*childNode)->AddEdgeToParentNode(edge);
-              (*parentNode)->AddEdgeToChildNode(edge);
+              // (*childNode)->AddEdgeToParentNode(edge.get());
+              // GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i); 여기
+              // 때문에 AddEdgeToParentNode 에서는 smart_pointer사용 못 함
+              (*childNode)->AddEdgeToParentNode(edge.get());
+              (*parentNode)->AddEdgeToChildNode(std::move(edge));
             }
 
             ////
@@ -210,19 +244,31 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
   GraphNode *rootNode = nullptr;
   for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it) {
     // search for nodes which have no incoming edges
+    // get() is return raw pointer
     if ((*it)->GetNumberOfParents() == 0) {
-
       if (rootNode == nullptr) {
-        rootNode = *it; // assign current node to root
+        // rootNode = *it; // assign current node to root
+        // rootNode = it->get();   // 포인터 접근법 1. ->func()
+        rootNode = (*it).get(); // 포인터 접근법 2. (*pt).func()
       } else {
         std::cout << "ERROR : Multiple root nodes detected" << std::endl;
       }
     }
   }
 
+  // kjs
+  // create local chatbot instance in stack (not heap)
+  ChatBot _localchatBot = ChatBot("../images/chatbot.png");
+
+  _localchatBot.SetChatLogicHandle(this);
+
   // add chatbot to graph root node
-  _chatBot->SetRootNode(rootNode);
-  rootNode->MoveChatbotHere(_chatBot);
+  _localchatBot.SetRootNode(rootNode);
+
+  _chatBot = &_localchatBot;
+
+  // 여기에 std::move안하니까 move constructor가 안불리네...
+  rootNode->MoveChatbotHere(std::move(_localchatBot));
 
   ////
   //// EOF STUDENT CODE

@@ -18,7 +18,7 @@ ChatBot::ChatBot() {
 
 // constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename) {
-  std::cout << "ChatBot Constructor" << std::endl;
+  std::cout << "ChatBot Constructor at " << this << std::endl;
 
   // invalidate data handles
   _chatLogic = nullptr;
@@ -32,17 +32,91 @@ ChatBot::~ChatBot() {
   // deallocate heap memory
   if (_image != NULL) // Attention: wxWidgets used NULL and not nullptr
   {
-    // if (_Chatbot_cnt == 0) {
     delete _image;
     _image = NULL;
-    // }
   }
-  std::cout << "ChatBot Destructor" << std::endl;
+  std::cout << "ChatBot Destructor at " << this << std::endl;
 }
 
 //// STUDENT CODE
 ////
+ChatBot::ChatBot(const ChatBot &source) // copy constructor
+{
+  std::cout << "ChatBot Copy Constructor at " << this << std::endl;
+  // copy members
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
 
+  /*   Here, a deep copy is required.(not shallow : _image = source._image)
+Because the variable _image is a pointer, and we are making a copy of the object
+that contains it.In this case, we must make a deep copy.If we don't, we will
+have two objects that contain the same pointer internally. This can lead to
+unintended changes and problems that are hard to trace. */
+  _image = new wxBitmap();
+  *_image = *source._image;
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &source) // Copy assignment
+{
+  std::cout << "Assigning content of instance at " << this << std::endl;
+  if (this == &source) {
+    return *this;
+  }
+  // copy members
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+
+  /*   Here, a deep copy is required.(not shallow : _image = source._image)
+Because the variable _image is a pointer, and we are making a copy of the object
+that contains it.In this case, we must make a deep copy.If we don't, we will
+have two objects that contain the same pointer internally. This can lead to
+unintended changes and problems that are hard to trace. */
+  _image = new wxBitmap();
+  *_image = *source._image;
+
+  return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&source) // 4 : move constructor
+{
+  std::cout << "MOVING (constructor) instance " << &source << " to instance "
+            << this << std::endl;
+  /* the implementation copies the data handle from source to target */
+  _image = source._image;
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  // When the bot moves, ChatLogic's handle to the bot must be updated
+  _chatLogic->SetChatbotHandle(this);
+  /* and immediately invalidates source after copying is complete.*/
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._image = NULL;
+}
+
+ChatBot &ChatBot::operator=(ChatBot &&source) // 5 : move assignment operator
+{
+  std::cout << "MOVING (assign) instance " << &source << " to instance " << this
+            << std::endl;
+  if (this == &source) {
+    return *this;
+  }
+  if (!_image)
+    delete _image;
+
+  /* the implementation copies the data handle from source to target */
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  _image = source._image;
+  // When the bot moves, ChatLogic's handle to the bot must be updated
+  _chatLogic->SetChatbotHandle(this);
+
+  /* and immediately invalidates source after copying is complete.*/
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._image = NULL;
+
+  return *this;
+}
 ////
 //// EOF STUDENT CODE
 
